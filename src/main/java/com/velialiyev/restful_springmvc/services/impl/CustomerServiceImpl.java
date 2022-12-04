@@ -2,6 +2,7 @@ package com.velialiyev.restful_springmvc.services.impl;
 
 import com.velialiyev.restful_springmvc.api.v1.mapper.CustomerMapper;
 import com.velialiyev.restful_springmvc.api.v1.model.CustomerDto;
+import com.velialiyev.restful_springmvc.domain.Customer;
 import com.velialiyev.restful_springmvc.repository.CustomerRepository;
 import com.velialiyev.restful_springmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
@@ -25,13 +26,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findCustomerById(Long id) {
-        return customerMapper.customerToCustomerDto(customerRepository.findById(id).orElseThrow());
+        return customerRepository.findById(id).map(customerMapper::customerToCustomerDto)
+                .map(customerDto -> {
+                    customerDto.setCustomer_url("/api/v1/customers/" + customerDto.getId());
+                    return customerDto;
+                }).orElseThrow();
     }
 
     @Override
-    public CustomerDto createNewCustomer(CustomerDto customer) {
-        return customerMapper.customerToCustomerDto(
-                customerRepository.save(customerMapper.customerDtoToCustomer(customer))
-        );
+    public CustomerDto createNewCustomer(CustomerDto customerDto) {
+
+        Customer customer = customerMapper.customerDtoToCustomer(customerDto);
+        Customer savedCustomer = customerRepository.save(customer);
+        savedCustomer.setCustomer_url("/api/v1/customers/" + savedCustomer.getId());
+        return customerMapper.customerToCustomerDto(savedCustomer);
     }
 }
