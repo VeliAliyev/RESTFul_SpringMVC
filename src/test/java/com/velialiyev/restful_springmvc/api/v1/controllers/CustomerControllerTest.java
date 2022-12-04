@@ -1,5 +1,7 @@
 package com.velialiyev.restful_springmvc.api.v1.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.velialiyev.restful_springmvc.api.v1.model.CustomerDto;
 import com.velialiyev.restful_springmvc.api.v1.model.CustomerListDto;
 import com.velialiyev.restful_springmvc.services.CustomerService;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -22,10 +25,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class CustomerControllerTest {
+class CustomerControllerTest extends AbstractRestControllerTest{
 
     @Mock
     private CustomerService customerService;
@@ -71,6 +75,28 @@ class CustomerControllerTest {
         //when
         mockMvc.perform(get("/api/v1/customers/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo("Veli")))
+                .andExpect(jsonPath("$.lastname", equalTo("Aliyev")));
+    }
+
+    @Test
+    void createNewCustomer() throws Exception {
+        //given
+        CustomerDto customer = CustomerDto.builder()
+                .firstname("Veli").lastname("Aliyev").build();
+
+        CustomerDto returnedCustomer = CustomerDto.builder()
+                .id(1L).firstname("Veli").lastname("Aliyev").customer_url("/api/v1/customers/1").build();
+        when(customerService.createNewCustomer(any(CustomerDto.class))).thenReturn(returnedCustomer);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(customer);
+
+        //when
+        mockMvc.perform(post("/api/v1/customers/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo("Veli")))
                 .andExpect(jsonPath("$.lastname", equalTo("Aliyev")));
     }

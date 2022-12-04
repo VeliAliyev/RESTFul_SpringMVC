@@ -27,4 +27,11 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto findCustomerById(Long id) {
         return customerMapper.customerToCustomerDto(customerRepository.findById(id).orElseThrow());
     }
+
+    @Override
+    public CustomerDto createNewCustomer(CustomerDto customer) {
+        return customerMapper.customerToCustomerDto(
+                customerRepository.save(customerMapper.customerDtoToCustomer(customer))
+        );
+    }
 }
