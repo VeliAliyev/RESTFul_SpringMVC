@@ -3,13 +3,12 @@ package com.velialiyev.restful_springmvc.api.v1.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
-    private Long id;
-    private String name;
+@Builder
+public class CategoryListDto {
+    List<CategoryDto> categories;
 }
