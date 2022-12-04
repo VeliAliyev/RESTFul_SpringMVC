@@ -21,7 +21,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDto> getAllCustomers() {
         return customerRepository.findAll()
-                .stream().map(customerMapper::customerToCustomerDto).collect(Collectors.toList());
+                .stream().map(customerMapper::customerToCustomerDto)
+                .map(customerDto -> {
+                    customerDto.setCustomer_url("/api/v1/customers/" + customerDto.getId());
+                    return customerDto;
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -40,5 +44,14 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
         savedCustomer.setCustomer_url("/api/v1/customers/" + savedCustomer.getId());
         return customerMapper.customerToCustomerDto(savedCustomer);
+    }
+
+    @Override
+    public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
+        Customer customer = customerMapper.customerDtoToCustomer(customerDto);
+        customer.setId(id);
+        Customer saved = customerRepository.save(customer);
+        saved.setCustomer_url("/api/v1/customers/" + saved.getId());
+        return customerMapper.customerToCustomerDto(saved);
     }
 }
