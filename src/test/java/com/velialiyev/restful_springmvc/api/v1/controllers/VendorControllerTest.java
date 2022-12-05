@@ -15,10 +15,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.velialiyev.restful_springmvc.api.v1.controllers.AbstractRestControllerTest.asJsonString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,5 +54,21 @@ class VendorControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vendors", hasSize(2)));
+    }
+
+    @Test
+    void createVendor() throws Exception {
+        //given
+        VendorDto vendorDto = VendorDto.builder().id(1L).name("Ayşe").vendor_url("/api/v1/vendors/1").build();
+        when(vendorService.createVendor(any(VendorDto.class))).thenReturn(vendorDto);
+
+        //when
+        mockMvc.perform(post("/api/v1/vendors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(vendorDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", equalTo("Ayşe")))
+                .andExpect(jsonPath("$.vendor_url", equalTo("/api/v1/vendors/1")));
+
     }
 }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class VendorServiceTest {
@@ -43,4 +44,21 @@ class VendorServiceTest {
         assertEquals(1L, vendorDtos.get(0).getId());
         assertEquals(2L, vendorDtos.get(1).getId());
     }
+
+    @Test
+    void createVendor(){
+        //given
+        VendorDto newVendorDto = VendorDto.builder().id(1L).name("Veli").build();
+        Vendor newVendor = Vendor.builder().id(1L).name("Veli").build();
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(newVendor);
+
+        //when
+        VendorDto savedVendor = vendorService.createVendor(newVendorDto);
+
+        //then
+        assertEquals(newVendorDto.getName(), savedVendor.getName());
+        assertEquals(newVendorDto.getId(), savedVendor.getId());
+
+    }
+
 }

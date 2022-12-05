@@ -2,6 +2,7 @@ package com.velialiyev.restful_springmvc.services.impl;
 
 import com.velialiyev.restful_springmvc.api.v1.mapper.VendorMapper;
 import com.velialiyev.restful_springmvc.api.v1.model.VendorDto;
+import com.velialiyev.restful_springmvc.domain.Vendor;
 import com.velialiyev.restful_springmvc.repository.VendorRepository;
 import com.velialiyev.restful_springmvc.services.VendorService;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,11 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public List<VendorDto> getAllVendors() {
         return vendorRepository.findAll().stream().map(vendorMapper::vendorToVendorDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public VendorDto createVendor(VendorDto vendorDto) {
+        Vendor vendor = vendorMapper.vendorDtoToVendor(vendorDto);
+        return vendorMapper.vendorToVendorDto(vendorRepository.save(vendor));
     }
 }
