@@ -29,4 +29,14 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = vendorMapper.vendorDtoToVendor(vendorDto);
         return vendorMapper.vendorToVendorDto(vendorRepository.save(vendor));
     }
+
+    @Override
+    public VendorDto findVendorById(Long id) {
+        return vendorMapper.vendorToVendorDto(vendorRepository.findById(id).orElseThrow());
+    }
+
+    @Override
+    public void deleteVendorById(Long id) {
+        vendorRepository.deleteById(id);
+    }
 }

@@ -20,9 +20,21 @@ public class VendorController {
         return new VendorListDto(vendorService.getAllVendors());
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public VendorDto findVendorById(@PathVariable Long id){
+        return vendorService.findVendorById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VendorDto createVendor(@RequestBody VendorDto vendorDto){
         return vendorService.createVendor(vendorDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void deleteVendor(@PathVariable Long id){
+        vendorService.deleteVendorById(id);
     }
 }

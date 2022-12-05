@@ -12,10 +12,12 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 class VendorServiceTest {
 
@@ -61,4 +63,17 @@ class VendorServiceTest {
 
     }
 
+    @Test
+    void getVendorById(){
+        //given
+        Vendor vendor = Vendor.builder().id(1L).name("Veli").build();
+        when(vendorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(vendor));
+
+        //when
+        VendorDto vendorDto = vendorService.findVendorById(anyLong());
+
+        //then
+        assertEquals(1L, vendorDto.getId());
+        assertEquals("Veli", vendorDto.getName());
+    }
 }
