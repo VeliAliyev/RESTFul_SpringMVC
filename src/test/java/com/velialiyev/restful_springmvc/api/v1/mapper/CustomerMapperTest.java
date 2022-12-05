@@ -9,10 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerMapperTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void customerToCustomerDto() {
         //given
