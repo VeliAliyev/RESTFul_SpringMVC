@@ -14,18 +14,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.swing.text.html.HTML;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,5 +100,13 @@ class CustomerControllerTest extends AbstractRestControllerTest{
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo("Veli")))
                 .andExpect(jsonPath("$.lastname", equalTo("Aliyev")));
+    }
+
+    @Test
+    void deleteCustomer() throws Exception {
+        mockMvc.perform(delete("/api/v1/customers/1"))
+                .andExpect(status().isOk());
+
+        verify(customerService, times(1)).deleteCustomer(anyLong());
     }
 }

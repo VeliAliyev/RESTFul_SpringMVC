@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/v1/customers/")
+@RequestMapping("/api/v1/customers")
 @AllArgsConstructor
 public class CustomerController {
 
@@ -21,7 +21,7 @@ public class CustomerController {
         return new ResponseEntity<>(new CustomerListDto(customerService.getAllCustomers()), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "id") Long id){
         return new ResponseEntity<>(customerService.findCustomerById(id), HttpStatus.OK);
     }
@@ -31,9 +31,21 @@ public class CustomerController {
         return new ResponseEntity<CustomerDto>(customerService.createNewCustomer(customerDTO),
                 HttpStatus.CREATED);
     }
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable(name = "id") Long id, @RequestBody CustomerDto customerDTO){
         return new ResponseEntity<CustomerDto>(customerService.updateCustomer(id, customerDTO),
                 HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerDto> patchCustomer(@PathVariable(name = "id") Long id, @RequestBody CustomerDto customerDTO){
+        return new ResponseEntity<CustomerDto>(customerService.patchCustomer(id, customerDTO),
+                HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable(name = "id")Long id){
+        customerService.deleteCustomer(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
