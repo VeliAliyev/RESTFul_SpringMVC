@@ -32,6 +32,18 @@ public class VendorController {
         return vendorService.createVendor(vendorDto);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public VendorDto updateVendor(@PathVariable Long id, @RequestBody VendorDto vendorDto){
+        return vendorService.updateVendor(id, vendorDto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public VendorDto patchVendor(@PathVariable Long id, @RequestBody VendorDto vendorDto){
+        return vendorService.patchVendor(id, vendorDto);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void deleteVendor(@PathVariable Long id){

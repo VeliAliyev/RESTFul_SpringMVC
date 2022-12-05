@@ -64,6 +64,25 @@ class VendorServiceTest {
     }
 
     @Test
+    void updateVendor(){
+        //given
+        VendorDto newVendorDto = VendorDto.builder().id(1L).name("Ayşe").build();
+        Vendor oldVendor = Vendor.builder().id(1L).name("Veli").build();
+        Vendor newVendor = Vendor.builder().id(1L).name("Ayşe").build();
+        when(vendorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(oldVendor));
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(newVendor);
+
+        //when
+        VendorDto savedVendor = vendorService.updateVendor(anyLong(), newVendorDto);
+
+        //then
+        assertNotNull(savedVendor);
+        assertEquals("Ayşe", savedVendor.getName());
+        assertNotEquals("Veli", savedVendor.getName());
+    }
+
+
+    @Test
     void getVendorById(){
         //given
         Vendor vendor = Vendor.builder().id(1L).name("Veli").build();

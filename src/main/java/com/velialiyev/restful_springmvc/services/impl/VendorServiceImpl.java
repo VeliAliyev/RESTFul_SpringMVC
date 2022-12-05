@@ -31,6 +31,29 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
+    public VendorDto updateVendor(Long id, VendorDto vendorDto) {
+        Vendor oldVendor = vendorRepository.findById(id).orElseThrow();
+        oldVendor.setName(vendorDto.getName());
+        return vendorMapper.vendorToVendorDto(vendorRepository.save(oldVendor));
+    }
+
+    @Override
+    public VendorDto patchVendor(Long id, VendorDto vendorDto) {
+
+        Vendor vendor = vendorRepository.findById(id).orElseThrow();
+
+        if(vendorDto.getName() != null){
+            vendor.setName(vendorDto.getName());
+        }
+
+        if(vendorDto.getVendor_url() != null){
+            vendor.setVendor_url(vendorDto.getVendor_url());
+        }
+
+        return vendorMapper.vendorToVendorDto(vendorRepository.save(vendor));
+    }
+
+    @Override
     public VendorDto findVendorById(Long id) {
         return vendorMapper.vendorToVendorDto(vendorRepository.findById(id).orElseThrow());
     }
