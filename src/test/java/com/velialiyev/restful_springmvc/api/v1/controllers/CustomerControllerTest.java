@@ -60,6 +60,7 @@ class CustomerControllerTest extends AbstractRestControllerTest{
 
         //when
         mockMvc.perform(get("/api/v1/customers/")
+                        .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(3)));
@@ -74,7 +75,9 @@ class CustomerControllerTest extends AbstractRestControllerTest{
         when(customerService.findCustomerById(anyLong())).thenReturn(customer);
 
         //when
-        mockMvc.perform(get("/api/v1/customers/1").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/customers/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo("Veli")))
                 .andExpect(jsonPath("$.lastname", equalTo("Aliyev")));
@@ -95,6 +98,7 @@ class CustomerControllerTest extends AbstractRestControllerTest{
 
         //when
         mockMvc.perform(post("/api/v1/customers/")
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
