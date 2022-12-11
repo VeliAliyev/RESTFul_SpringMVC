@@ -1,7 +1,8 @@
 package restful_springmvc.api.v1.controllers;
 
-import restful_springmvc.api.v1.model.CustomerDto;
-import restful_springmvc.api.v1.model.CustomerListDto;
+
+import com.restful_springmvc.CustomerDto;
+import com.restful_springmvc.CustomerListDto;
 import restful_springmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,9 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<CustomerListDto> getAllCustomers(){
-        return new ResponseEntity<>(new CustomerListDto(customerService.getAllCustomers()), HttpStatus.OK);
+        CustomerListDto customers = new CustomerListDto();
+        customers.getCustomers().addAll(customerService.getAllCustomers());
+        return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -20,5 +20,5 @@ public class Customer {
     Long id;
     String firstname;
     String lastname;
-    String customer_url;
+    String customerUrl;
 }

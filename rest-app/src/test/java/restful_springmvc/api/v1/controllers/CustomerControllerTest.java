@@ -2,6 +2,7 @@ package restful_springmvc.api.v1.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.restful_springmvc.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import restful_springmvc.api.v1.model.CustomerDto;
+
 import restful_springmvc.services.CustomerService;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -46,12 +47,28 @@ class CustomerControllerTest extends AbstractRestControllerTest{
     @Test
     void getAllCustomers() throws Exception {
 
-        //given
-        List<CustomerDto> customers = new ArrayList<>(Arrays.asList(
-                CustomerDto.builder().id(1L).firstname("Veli").lastname("Aliyev").customer_url("/api/v1/customers/1").build(),
-                CustomerDto.builder().id(2L).firstname("Michael").lastname("Page").customer_url("/api/v1/customers/2").build(),
-                CustomerDto.builder().id(3L).firstname("Jenna").lastname("Ortega").customer_url("/api/v1/customers/3").build()
-        ));
+        CustomerDto c1 = new CustomerDto();
+        c1.setId(1L);
+        c1.setFirstname("Veli");
+        c1.setLastname("Aliyev");
+        c1.setCustomerUrl("/api/v1/customers/1");
+
+        CustomerDto c2 = new CustomerDto();
+        c1.setId(2L);
+        c1.setFirstname("Michael");
+        c1.setLastname("Page");
+        c1.setCustomerUrl("/api/v1/customers/2");
+
+        CustomerDto c3 = new CustomerDto();
+        c1.setId(3L);
+        c1.setFirstname("Jenna");
+        c1.setLastname("Ortega");
+        c1.setCustomerUrl("/api/v1/customers/3");
+
+
+
+                //given
+        List<CustomerDto> customers = new ArrayList<>(Arrays.asList(c1, c2, c3));
 
         when(customerService.getAllCustomers()).thenReturn(customers);
 
@@ -67,7 +84,11 @@ class CustomerControllerTest extends AbstractRestControllerTest{
     @Test
     void getCustomerById() throws Exception {
         //given
-        CustomerDto customer = CustomerDto.builder().id(1L).firstname("Veli").lastname("Aliyev").build();
+        CustomerDto customer = new CustomerDto();
+        customer.setId(1L);
+        customer.setFirstname("Veli");
+        customer.setLastname("Aliyev");
+        customer.setCustomerUrl("/api/v1/customers/1");
 
         when(customerService.findCustomerById(anyLong())).thenReturn(customer);
 
@@ -83,12 +104,16 @@ class CustomerControllerTest extends AbstractRestControllerTest{
     @Test
     void createNewCustomer() throws Exception {
         //given
-        CustomerDto customer = CustomerDto.builder()
-                .firstname("Veli").lastname("Aliyev").build();
+        CustomerDto customer = new CustomerDto();
+        customer.setFirstname("Veli");
+        customer.setLastname("Aliyev");
 
-        CustomerDto returnedCustomer = CustomerDto.builder()
-                .id(1L).firstname("Veli").lastname("Aliyev").customer_url("/api/v1/customers/1").build();
-        when(customerService.createNewCustomer(any(CustomerDto.class))).thenReturn(returnedCustomer);
+        CustomerDto returnedCustomer = new CustomerDto();
+        returnedCustomer.setId(1L);
+        returnedCustomer.setFirstname("Veli");
+        returnedCustomer.setLastname("Aliyev");
+        returnedCustomer.setCustomerUrl("/api/v1/customers/1");
+        when(customerService.createNewCustomer(any())).thenReturn(returnedCustomer);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(customer);

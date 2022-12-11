@@ -1,11 +1,12 @@
 package restful_springmvc.services;
 
+import com.restful_springmvc.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import restful_springmvc.api.v1.mapper.CustomerMapper;
-import restful_springmvc.api.v1.model.CustomerDto;
+
 import restful_springmvc.domain.Customer;
 import restful_springmvc.repository.CustomerRepository;
 import restful_springmvc.services.impl.CustomerServiceImpl;
@@ -36,9 +37,9 @@ class CustomerServiceTest {
     void getAllCustomers() {
         //given
         List<Customer> customers = Arrays.asList(
-                Customer.builder().id(1L).firstname("Veli").lastname("Aliyev").customer_url("/api/v1/customers/1").build(),
-                Customer.builder().id(2L).firstname("Emma").lastname("Watson").customer_url("/api/v1/customers/2").build(),
-                Customer.builder().id(3L).firstname("Jenna").lastname("Ortega").customer_url("/api/v1/customers/3").build()
+                Customer.builder().id(1L).firstname("Veli").lastname("Aliyev").customerUrl("/api/v1/customers/1").build(),
+                Customer.builder().id(2L).firstname("Emma").lastname("Watson").customerUrl("/api/v1/customers/2").build(),
+                Customer.builder().id(3L).firstname("Jenna").lastname("Ortega").customerUrl("/api/v1/customers/3").build()
         );
         when(customerRepository.findAll()).thenReturn(customers);
 
@@ -52,7 +53,7 @@ class CustomerServiceTest {
     @Test
     void findCustomerById() {
         //given
-        Customer veli = Customer.builder().id(1L).firstname("Veli").lastname("Aliyev").customer_url("/api/v1/customers/1").build();
+        Customer veli = Customer.builder().id(1L).firstname("Veli").lastname("Aliyev").customerUrl("/api/v1/customers/1").build();
         when(customerRepository.findById(anyLong())).thenReturn(Optional.of(veli));
 
         //when
@@ -63,26 +64,26 @@ class CustomerServiceTest {
         assertEquals(1L, veliDto.getId());
         assertEquals("Veli", veliDto.getFirstname());
         assertEquals("Aliyev", veliDto.getLastname());
-        assertEquals("/api/v1/customers/1", veliDto.getCustomer_url());
+        assertEquals("/api/v1/customers/1", veliDto.getCustomerUrl());
     }
 
     @Test
     void createNewCustomer(){
         //given
-        CustomerDto newCustomer = CustomerDto.builder()
-                .id(1L).firstname("Veli")
-                .lastname("Aliyev")
-                .customer_url("/api/v1/customers/1")
-                .build();
+        CustomerDto newCustomer = new CustomerDto();
+                newCustomer.setCustomerUrl("/api/v1/customers/1");
+                newCustomer.setFirstname("Veli");
+                newCustomer.setLastname("Aliyev");
+                newCustomer.setId(1L);
 
         Customer savedCustomer = Customer.builder()
                 .id(newCustomer.getId())
                 .firstname(newCustomer.getFirstname())
                 .lastname(newCustomer.getLastname())
-                .customer_url(newCustomer.getCustomer_url())
+                .customerUrl("/api/v1/customers/1")
                 .build();
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerRepository.save(any())).thenReturn(savedCustomer);
 
         //when
         CustomerDto savedCustomerDto = customerService.createNewCustomer(newCustomer);
@@ -91,6 +92,6 @@ class CustomerServiceTest {
         assertEquals(1L, savedCustomerDto.getId());
         assertEquals("Veli", savedCustomerDto.getFirstname());
         assertEquals("Aliyev", savedCustomerDto.getLastname());
-        assertEquals("/api/v1/customers/1", savedCustomerDto.getCustomer_url());
+        assertEquals("/api/v1/customers/1", savedCustomerDto.getCustomerUrl());
     }
 }

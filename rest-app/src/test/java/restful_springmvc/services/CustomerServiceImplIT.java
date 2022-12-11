@@ -1,5 +1,6 @@
 package restful_springmvc.services;
 
+import com.restful_springmvc.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import restful_springmvc.api.v1.mapper.CustomerMapper;
-import restful_springmvc.api.v1.model.CustomerDto;
+
 import restful_springmvc.bootstrap.Bootstrap;
 import restful_springmvc.domain.Customer;
 import restful_springmvc.repository.CategoryRepository;

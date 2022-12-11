@@ -1,7 +1,8 @@
 package restful_springmvc.services.impl;
 
+import com.restful_springmvc.CustomerDto;
 import restful_springmvc.api.v1.mapper.CustomerMapper;
-import restful_springmvc.api.v1.model.CustomerDto;
+
 import restful_springmvc.domain.Customer;
 import restful_springmvc.repository.CustomerRepository;
 import restful_springmvc.services.CustomerService;
@@ -23,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll()
                 .stream().map(customerMapper::customerToCustomerDto)
                 .map(customerDto -> {
-                    customerDto.setCustomer_url("/api/v1/customers/" + customerDto.getId());
+                    customerDto.setCustomerUrl("/api/v1/customers/" + customerDto.getId());
                     return customerDto;
                 }).collect(Collectors.toList());
     }
@@ -32,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto findCustomerById(Long id) {
         return customerRepository.findById(id).map(customerMapper::customerToCustomerDto)
                 .map(customerDto -> {
-                    customerDto.setCustomer_url("/api/v1/customers/" + customerDto.getId());
+                    customerDto.setCustomerUrl("/api/v1/customers/" + customerDto.getId());
                     return customerDto;
                 }).orElseThrow();
     }
@@ -42,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = customerMapper.customerDtoToCustomer(customerDto);
         Customer savedCustomer = customerRepository.save(customer);
-        savedCustomer.setCustomer_url("/api/v1/customers/" + savedCustomer.getId());
+        savedCustomer.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
         return customerMapper.customerToCustomerDto(savedCustomer);
     }
 
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerMapper.customerDtoToCustomer(customerDto);
         customer.setId(id);
         Customer saved = customerRepository.save(customer);
-        saved.setCustomer_url("/api/v1/customers/" + saved.getId());
+        saved.setCustomerUrl("/api/v1/customers/" + saved.getId());
         return customerMapper.customerToCustomerDto(saved);
     }
 

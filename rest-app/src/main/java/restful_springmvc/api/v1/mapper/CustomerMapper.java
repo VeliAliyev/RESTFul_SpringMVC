@@ -1,6 +1,8 @@
 package restful_springmvc.api.v1.mapper;
 
-import restful_springmvc.api.v1.model.CustomerDto;
+
+
+import com.restful_springmvc.CustomerDto;
 import restful_springmvc.domain.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

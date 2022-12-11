@@ -1,6 +1,6 @@
 package restful_springmvc.services;
 
-import restful_springmvc.api.v1.model.CustomerDto;
+import com.restful_springmvc.CustomerDto;
 
 import java.util.List;
 
